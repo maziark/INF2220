@@ -25,8 +25,7 @@ public class Task{
 	}
 
 	public boolean equals(Task to){
-		return (name.equals(to.name) 
-			&& id == to.id));
+		return (this.id == to.id);
 	}
 
 	public String toString (){

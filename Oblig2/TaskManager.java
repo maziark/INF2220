@@ -1,24 +1,26 @@
 import java.util.*;
 import java.io.*;
 public class TaskManager {
+
+	class Properties {
+		int manpower;
+		int weight;
+	}
+
 	List <Task>			viewed;
 	List <Task>			toBeDone;
 	List <Task>			Q;
 	List <Task>			startingPoints;
 	HashMap <Integer, Task>		allTasks;
+	Graph <Task, Properties>	tasks;
 	
-	TaskManager (){
-		allTasks = new HashMap <Integer, Task> ();
-		viewed = new ArrayList <Task> ();
-		Q = new ArrayList <Task> ();
-		System.out.println(initiateGraph ("buildhouse2.txt"));
-		startingPoints = new ArrayList <Task> ();
-		setStartingPoints ();
-		
-		System.out.println (isRealizable());
-		OptimizeTime();
+	
+	public TaskManager (){
+		tasks 	= new Graph <Task, Properties>();
+		Q 	= new ArrayList <Task> ();
+		viewed 	= new ArrayList <Task> ();
 	}
-
+	
 	void setStartingPoints(){
 		System.out.println ("Set Starting point");
 		for (Task t: allTasks.values()){
@@ -43,33 +45,6 @@ public class TaskManager {
 		}
 	}
 
-	
-	boolean isRealizable (){
-		ArrayList <Task> cycle = new ArrayList <Task> ();
-		
-		if (startingPoints.size () == 0) return false;
-		Task current = startingPoints.get(0);
-		viewed.add(current);
-		cycle.add (current);
-		addNextTaskInQ(current, false);
-		while (Q.size() > 0){
-			String strViewed = "";
-			String strQ = "";
-			current = Q.remove(0);
-			if (viewed.contains(current)) {
-				System.out.println ("Cycle found!!!!!!!!!!!!!1");
-				for (Task t: cycle) System.out.println (t.toString());
-				return false;
-				
-			}
-			viewed.add(current);
-			cycle.add(current);
-			addNextTaskInQ (current, false);
-		}
-
-		if (viewed.size() < allTasks.values().size()) return false;
-		return true;
-	}
 
 	boolean initiateGraph (String fileName){
 		int numberOfTasks = 0;
@@ -77,6 +52,7 @@ public class TaskManager {
 			Scanner input = new Scanner (new File(fileName));
 			numberOfTasks = Integer.parseInt(input.next());
 			for (int i = 1; i <= numberOfTasks; i++) tasks.addNode (new Task(i));
+
 			for (int i = 0; i < numberOfTasks; i++){
 				Task tmp	= new Task();
 				tmp.id		= Integer.parseInt(input.next());
@@ -84,25 +60,13 @@ public class TaskManager {
 				tmp.time	= Integer.parseInt(input.next());
 				tmp.staff	= Integer.parseInt(input.next());
 				int requirement = Integer.parseInt(input.next());
-				//tmp.inEdges = new ArrayList <Integer> ();
 				while (requirement != 0){
-					//System.out.println (requirement);
 					tmp.inEdges.add(requirement);
 					requirement = Integer.parseInt(input.next());
 				}
 				tmp.cntPredecessors = tmp.inEdges.size();
 				allTasks.put(tmp.id, tmp);
 			}
-			for (int i = 1; i < numberOfTasks+1; i++){
-				for (int j = 0; j < allTasks.get(i).cntPredecessors; j++){
-					allTasks.get(allTasks.get(i).inEdges.get(j)).outEdges.add(allTasks.get(i));
-				}
-			}
-			/*for (Task t: allTasks.values()){
-				System.out.println (t.toString() + "outEdges : " );
-				for (Task p: t.outEdges)
-					System.out.println ("\t" + p.toString() );
-			}*/
 			return true;
 		}catch (Exception e){
 			System.out.println (e);
