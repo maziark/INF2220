@@ -3,8 +3,8 @@ import java.io.*;
 public class TaskManager {
 
 	class Properties {
-		int manpower;
-		int weight;
+		int staff;
+		int time;
 	}
 
 	List <Task>			viewed;
@@ -54,11 +54,11 @@ public class TaskManager {
 			for (int i = 1; i <= numberOfTasks; i++) tasks.addNode (new Task(i));
 
 			for (int i = 0; i < numberOfTasks; i++){
-				Task tmp	= new Task();
-				tmp.id		= Integer.parseInt(input.next());
-				tmp.name	= input.next();
-				tmp.time	= Integer.parseInt(input.next());
-				tmp.staff	= Integer.parseInt(input.next());
+				Properties p = new Properties ();
+				tasks.keySet().get(i).id	= Integer.parseInt(input.next());
+				tasks.keySet().get(i).name	= input.next();
+				p.time				= Integer.parseInt(input.next());
+				p.staff				= Integer.parseInt(input.next());
 				int requirement = Integer.parseInt(input.next());
 				while (requirement != 0){
 					tmp.inEdges.add(requirement);

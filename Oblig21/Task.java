@@ -9,19 +9,21 @@ public class Task{
 	List<Task>	inEdges;
 	int		cntPredecessors = 0;
 
-	Task (){
+	Task (int id){
+		this.id = id;
 		outEdges = new ArrayList <Task>();
-		inEdges = new ArrayList <Integer>();
+		inEdges = new ArrayList <Task>();
 	}
 
 	public void setES (int ES){
 		this.earliestStart = ES;
 		this.earliestFinish = this.earliestStart + this.time;
+		this.setLF(this.earliestFinish);
 	}
 
-	public void setLS (int LS){
-		this.latestStart = LS;
-		this.latestFinish = this.latestStart + this.time;
+	public void setLF (int LF){
+		this.latestStart = LF - time;
+		this.latestFinish = LF;
 	}
 
 	public boolean equals(Task to){
